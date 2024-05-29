@@ -1,0 +1,35 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="multi_robot_name" default=""/>
+  <arg name="set_lidar_frame_id" default="base_scan"/>
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+
+  <!-- Initial pose arguments -->
+  <arg name="tb3_0_x" default="1.0"/>
+  <arg name="tb3_0_y" default="0.0"/>
+  <arg name="tb3_0_z" default="0.0"/>
+  <arg name="tb3_0_yaw" default="0.0"/>
+
+  <!-- Include TurtleBot core launch file -->
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_core.launch">
+    <arg name="multi_robot_name" value="$(arg multi_robot_name)"/>
+  </include>
+  
+  <!-- Include TurtleBot LiDAR launch file -->
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_lidar.launch">
+    <arg name="set_frame_id" value="$(arg set_lidar_frame_id)"/>
+  </include>
+  
+  <!-- TurtleBot diagnostics -->
+  <node pkg="turtlebot3_bringup" type="turtlebot3_diagnostics" name="turtlebot3_diagnostics" output="screen"/>
+
+  <!-- Camera setup for waffle_pi -->
+  <group if="$(eval model == 'waffle_pi')">
+    <include file="$(find turtlebot3_bringup)/launch/turtlebot3_rpicamera.launch"/>
+  </group>
+
+  <!-- Static transform for initial pose -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="initial_pose_publisher"
+        args="$(arg initial_x) $(arg initial_y) $(arg initial_z) 0 0 $(arg initial_yaw) $(arg multi_robot_name)/odom $(arg multi_robot_name)/base_footprint"/>
+</launch>
+
