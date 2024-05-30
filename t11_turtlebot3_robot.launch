@@ -30,6 +30,6 @@
 
   <!-- Static transform for initial pose -->
   <node pkg="tf2_ros" type="static_transform_publisher" name="initial_pose_publisher"
-        args="$(arg initial_x) $(arg initial_y) $(arg initial_z) 0 0 $(arg initial_yaw) $(arg multi_robot_name)/odom $(arg multi_robot_name)/base_footprint"/>
+        args="$(arg tb3_0_x) $(arg tb3_0_y) $(arg tb3_0_z) 0 0 $(arg tb3_0_yaw) $(arg multi_robot_name)/odom $(arg multi_robot_name)/base_footprint"/>
 </launch>
 
